@@ -28,6 +28,12 @@ final class Module extends \luya\base\Module implements CoreModuleInterface
     public $slackChannel = '#luya';
 
     /**
+     * @var string The link to the "create issue" button.
+     * @since 1.0.1
+     */
+    public $issueCreateRepo = 'https://github.com/luyadev/luya';
+    
+    /**
      * @inheritdoc
      */
     public $urlRules = [

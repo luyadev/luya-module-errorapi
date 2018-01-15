@@ -12,12 +12,16 @@
 			"homepage" : "https://github.com/nadar"
 		}
 	],
+	"require-dev" : {
+	   "luyadev/luya-testsuite" : "~1.0.0"
+	},
 	"support" : {
 		"issues" : "https://github.com/luyadev/luya/issues"
 	},
 	"autoload" : {
 		"psr-4" : {
-			"luya\\errorapi\\" : "src/"
+			"luya\\errorapi\\" : "src/",
+			"luya\\errorapi\\tests\\" : "tests/"
 		}
 	},
 	"extra": {

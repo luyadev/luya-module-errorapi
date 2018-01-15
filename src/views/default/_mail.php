@@ -1,71 +1,42 @@
 <?php
+
+use luya\errorapi\Module;
+use luya\helpers\Html;
+use yii\helpers\VarDumper;
+
 /**
- * @var $model
+ * @var $model \luya\errorapi\models\Data The data model with the message.
+ * @var $issueLink string The link for the create new issue button
+ * @var $this \luya\web\View current view.
  */
 ?>
-<h1 style="color: #f00;"><?php echo $model->message; ?></h1>
-<p style="color: #800000;">from <strong><?php echo $model->serverName; ?></strong></p>
-<a href="https://github.com/luyadev/luya/issues/new?title=<?php echo urlencode('#'. $model->identifier . ' ' . $model->message);?>"><?php echo luya\errorapi\Module::t('mail_create_issue') ?></a>
-<table cellspacing="2" cellpadding="6" border="0" width="1200">
-<?php foreach ($model->errorArray as $key => $value): ?>
+<h1 style="color:#f00;"><?= $model->getErrorMessage(); ?></h1>
+<p style="color:#800000;">from <strong><?= $model->getServerName(); ?></strong></p>
+<a href="<?= $issueLink; ?>" target="_blank"><?= Module::t('mail_create_issue') ?></a>
+<table cellspacing="2" cellpadding="6" border="0" width="100%">
+<?php foreach ($model->getErrorArray() as $key => $value): ?>
 <tr>
-    <td width="150" style="background-color:#F0F0F0;"><strong><?php echo $key; ?>:</strong></td>
-    <td width="1050" style="background-color:#F0F0F0;">
-        <?php if ($key === 'trace'): ?>
-            <table border="0" cellpadding="4" cellspacing="2" width="100%">
-                <?php foreach ($value as $number => $trace): ?>
-                <tr>
-                    <td style="background-color:#e1e1e1; text-align:center;" width="40">
-                        #<?php echo $number; ?>
-                    </td>
-                    <td style="background-color:#e1e1e1;">
-                        <table cellspacing="0" cellpadding="4" border="0">
-                            <?php foreach ($trace as $kt => $vt): ?>
-                            <tr>
-                                <td><?php echo $kt; ?>:</td><td><?php echo $vt; ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </table>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </table>
+    <td width="150" style="background-color:#F0F0F0;"><strong><?= Html::encode($key); ?>:</strong></td>
+    <td style="background-color:#F0F0F0;">
+        <?php if (strtolower($key) === 'trace' && is_array($value)): ?>
+            <?= $this->render('_trace', ['data' => $value]); ?>
         <?php elseif (is_array($value)): ?>
             <table cellspacing="0" cellpadding="4" border="0">
-                <?php foreach ($value as $k => $v): ?>
-                 <?php if ($k == 'trace'): ?>
+                 <?php foreach ($value as $k => $v): ?>
                     <tr>
-                        <td><?php echo $k; ?>:</td>
+                        <td><?= Html::encode($k); ?>:</td>
                         <td>
-                          <table border="0" cellpadding="4" cellspacing="2" width="100%">
-                                <?php foreach ($v as $number => $trace): ?>
-                                <tr>
-                                    <td style="background-color:#e1e1e1; text-align:center;" width="40">
-                                        #<?php echo $number; ?>
-                                    </td>
-                                    <td style="background-color:#e1e1e1;">
-                                        <table cellspacing="0" cellpadding="4" border="0">
-                                            <?php foreach ($trace as $kk => $vv): ?>
-                                            <tr>
-                                                <td><?php echo $kk; ?>:</td><td><?php echo $vv; ?></td>
-                                            </tr>
-                                            <?php endforeach; ?>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </table>
+                            <?php if (strtolower($k) == 'trace' && is_array($v)): ?>
+                                <?= $this->render('_trace', ['data' => $v]); ?>
+                            <?php else: ?>
+                                <?= VarDumper::dumpAsString($v, 10, true); ?>
+                            <?php endif; ?>
                         </td>
                     </tr>
-                 <?php else: ?>
-                    <tr>
-                        <td><?php echo $k; ?>:</td><td><?php echo (is_array($v)) ?  print_r($v, true) : $v; ?></td>
-                    </tr>
-                 <?php endif; ?>
                 <?php endforeach; ?>
             </table>
         <?php else: ?>
-            <?php echo $value; ?>
+            <?= VarDumper::dumpAsString($value, 10, true); ?>
         <?php endif;?>
     </td>
 </tr>

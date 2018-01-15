@@ -4,6 +4,7 @@ namespace luya\errorapi\models;
 
 use luya\errorapi\Module;
 use yii\db\ActiveRecord;
+use yii\helpers\Json;
 
 /**
  * Error Data Model.
@@ -18,15 +19,38 @@ use yii\db\ActiveRecord;
  */
 class Data extends ActiveRecord
 {
-    public $message;
-
-    public $serverName;
-    
-    public $errorArray = [];
-
+    /**
+     * @inheritdoc
+     */
     public static function tableName()
     {
         return 'error_data';
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        
+        $this->on(self::EVENT_BEFORE_INSERT, [$this, 'eventBeforeCreate']);
+    }
+    
+    /**
+     * Before new item creation.
+     *
+     * @param \yii\base\Event $event
+     */
+    public function eventBeforeCreate($event)
+    {
+        if (!$this->getErrorMessage() || !$this->getServerName()) {
+            $event->isValid = false;
+            return $this->addError('error_json', Module::t('data_content_error'));
+        }
+        
+        $this->timestamp_create = time();
+        $this->identifier = $this->createMessageIdentifier($this->getErrorMessage());
     }
     
     /**
@@ -54,36 +78,68 @@ class Data extends ActiveRecord
             'timestamp_create' => 'Timestamp Create',
         ];
     }
-
-    public function init()
+    
+    private $_errorArray;
+    
+    /**
+     * Get an array from error json.
+     * 
+     * @return array
+     */
+    public function getErrorArray()
     {
-        parent::init();
-
-        $this->on(self::EVENT_BEFORE_INSERT, [$this, 'eventBeforeCreate']);
-    }
-
-    public function eventBeforeCreate($event)
-    {
-        if (is_array($this->error_json)) {
-            $event->isValid = false;
-            return $this->addError('error_json', Module::t('data_json_error'));
+        if ($this->_errorArray === null) {
+            $this->_errorArray = Json::decode($this->error_json);
         }
         
-        $errorJsonArray = json_decode($this->error_json, true);
-        
-        if (!isset($errorJsonArray['message']) || !isset($errorJsonArray['serverName'])) {
-            $event->isValid = false;
-            return $this->addError('error_json', Module::t('data_content_error'));
-        }
-        
-        $this->errorArray = $errorJsonArray;
-        $this->message = $errorJsonArray['message'];
-        $this->serverName = $errorJsonArray['serverName'];
-        $this->timestamp_create = time();
-        $this->identifier = $this->createMessageIdentifier($this->message);
-        $this->error_json = json_encode($errorJsonArray);
+        return $this->_errorArray;
     }
 
+    /**
+     * Get a sepcific key from error array.
+     * 
+     * @param string $key
+     * @return boolean
+     */
+    public function getErrorArrayKey($key)
+    {
+        return isset($this->getErrorArray()[$key]) ? $this->getErrorArray()[$key] : false;
+    }
+    
+    /**
+     * Get error message from error array.
+     * 
+     * @return boolean
+     */
+    public function getErrorMessage()
+    {
+        return $this->getErrorArrayKey('message');
+    }
+    
+    /**
+     * Get Server name from error array.
+     * @return boolean
+     */
+    public function getServerName()
+    {
+        return $this->getErrorArrayKey('serverName');
+    }
+
+    /**
+     * Get new issue creation header.
+     *
+     * @return string
+     */
+    public function getIssueLink($server)
+    {
+        return $server.'/issues/new?title='.urlencode('#'. $this->identifier . ' ' . $this->getErrorMessage());
+    }
+    /**
+     * Create identifier hash from message.
+     * 
+     * @param string $msg
+     * @return string
+     */
     public function createMessageIdentifier($msg)
     {
         return sprintf('%s', hash('crc32b', $msg));

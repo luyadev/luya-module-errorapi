@@ -40,23 +40,36 @@ class DefaultController extends \luya\rest\Controller
         $model->error_json = Yii::$app->request->post('error_json', null);
         
         if ($model->save()) {
-            if ($this->module->slackToken !== null) {
-                $this->slack('#'.$model->identifier.' | '.$model->serverName.': '.$model->message, $this->module->slackChannel);
+            // send slack message if enabled
+            if ($this->module->slackToken) {
+                $this->sendSlackMessage('#'.$model->identifier.' | '.$model->serverName.': '.$model->message, $this->module->slackChannel);
             }
-            
-            $mailHtml = $this->renderPartial('_mail', ['model' => $model]);
-            
+            // send error email if recipients are provided.
             if (!empty($this->module->recipient)) {
-                $mailer = Yii::$app->mail->compose('Error Api: ' . $model->serverName, $mailHtml);
-                foreach ($this->module->recipient as $recipient) {
-                    $mailer->address($recipient);
-                }
-                $mailer->send();
+                Yii::$app->mail
+                    ->compose($model->serverName . ' Error', $this->renderMail($model))
+                    ->addresses($this->module->recipient)
+                    ->send();
             }
+            
             return true;
         }
         
-        return $model->getErrors();
+        return $this->sendModelError($model);
+    }
+    
+    /**
+     * Render the error EMail.
+     * 
+     * @param Data $model
+     * @return string
+     */
+    protected function renderMail(Data $model)
+    {
+        return $this->renderPartial('_mail', [
+            'model' => $model,
+            'issueLink' => $model->getIssueLink($this->module->issueCreateRepo),
+        ]);
     }
 
     /**
@@ -66,7 +79,7 @@ class DefaultController extends \luya\rest\Controller
      * @param string $channel The channel where the message should appear.
      * @return mixed
      */
-    public function slack($message, $channel)
+    protected function sendSlackMessage($message, $channel)
     {
         $ch = curl_init('https://slack.com/api/chat.postMessage');
         $data = http_build_query([
