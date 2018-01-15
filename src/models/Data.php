@@ -85,6 +85,7 @@ class Data extends ActiveRecord
      * Get an array from error json.
      * 
      * @return array
+     * @since 1.0.1
      */
     public function getErrorArray()
     {
@@ -100,6 +101,7 @@ class Data extends ActiveRecord
      * 
      * @param string $key
      * @return boolean
+     * @since 1.0.1
      */
     public function getErrorArrayKey($key)
     {
@@ -110,6 +112,7 @@ class Data extends ActiveRecord
      * Get error message from error array.
      * 
      * @return boolean
+     * @since 1.0.1
      */
     public function getErrorMessage()
     {
@@ -119,6 +122,7 @@ class Data extends ActiveRecord
     /**
      * Get Server name from error array.
      * @return boolean
+     * @since 1.0.1
      */
     public function getServerName()
     {
@@ -129,6 +133,7 @@ class Data extends ActiveRecord
      * Get new issue creation header.
      *
      * @return string
+     * @since 1.0.1
      */
     public function getIssueLink($server)
     {

@@ -42,7 +42,7 @@ class DefaultController extends \luya\rest\Controller
         if ($model->save()) {
             // send slack message if enabled
             if ($this->module->slackToken) {
-                $this->sendSlackMessage('#'.$model->identifier.' | '.$model->serverName.': '.$model->message, $this->module->slackChannel);
+                $this->sendSlackMessage('#'.$model->identifier.' | '.$model->getServerName().': '.$model->getErrorMessage(), $this->module->slackChannel);
             }
             // send error email if recipients are provided.
             if (!empty($this->module->recipient)) {
