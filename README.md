@@ -9,7 +9,7 @@
 [![Total Downloads](https://poser.pugx.org/luyadev/luya-module-errorapi/downloads)](https://packagist.org/packages/luyadev/luya-module-errorapi)
 [![Slack Support](https://img.shields.io/badge/Slack-luyadev-yellowgreen.svg)](https://slack.luya.io/)
 
-For a strong and secure website, it is important to get access to all the errors and exceptions that occur in the background before your customer complain and make sure that it only happens once.
+For a solid and secure website, it is important to get notified about all the errors and exceptions that occur. This helps prevent unnoticed repeating errors and keeps customers happy as they won't have to complain.
 
 With the Error Api module, you can send all exceptions to your personal Error Api and get notify by email or Slack. If an exception occurs on the customer website, you will be notified with the full error stack and a slack notification will be sent (if configured).
 
