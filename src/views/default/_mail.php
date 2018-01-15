@@ -67,6 +67,7 @@
         <?php else: ?>
             <?php echo $value; ?>
         <?php endif;?>
+    </td>
 </tr>
 <?php endforeach; ?>
 </table>
