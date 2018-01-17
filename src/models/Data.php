@@ -83,7 +83,7 @@ class Data extends ActiveRecord
     
     /**
      * Get an array from error json.
-     * 
+     *
      * @return array
      * @since 1.0.1
      */
@@ -98,7 +98,7 @@ class Data extends ActiveRecord
 
     /**
      * Get a sepcific key from error array.
-     * 
+     *
      * @param string $key
      * @return boolean
      * @since 1.0.1
@@ -110,7 +110,7 @@ class Data extends ActiveRecord
     
     /**
      * Get error message from error array.
-     * 
+     *
      * @return boolean
      * @since 1.0.1
      */
@@ -141,7 +141,7 @@ class Data extends ActiveRecord
     }
     /**
      * Create identifier hash from message.
-     * 
+     *
      * @param string $msg
      * @return string
      */

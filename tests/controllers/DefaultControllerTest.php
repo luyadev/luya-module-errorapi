@@ -152,7 +152,6 @@ class DefaultControllerTest extends ErrorApiTestCase
 EOT;
         
         $this->assertSame($expect, $html);
-        
     }
     
     protected function invokeMethod(&$object, $methodName, array $parameters = array())

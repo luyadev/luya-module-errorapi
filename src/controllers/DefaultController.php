@@ -60,7 +60,7 @@ class DefaultController extends \luya\rest\Controller
     
     /**
      * Render the error EMail.
-     * 
+     *
      * @param Data $model
      * @return string
      */
