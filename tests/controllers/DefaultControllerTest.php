@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\web\luya\errorapi\controllers;
+namespace luya\errorapi\tests\controllers;
 
 use Yii;
 use luya\errorapi\tests\ErrorApiTestCase;
@@ -152,13 +152,5 @@ class DefaultControllerTest extends ErrorApiTestCase
 EOT;
         
         $this->assertSame($expect, $html);
-    }
-    
-    protected function invokeMethod(&$object, $methodName, array $parameters = array())
-    {
-        $reflection = new \ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method->invokeArgs($object, $parameters);
     }
 }

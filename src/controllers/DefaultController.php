@@ -42,7 +42,7 @@ class DefaultController extends \luya\rest\Controller
         if ($model->save()) {
             // send slack message if enabled
             if ($this->module->slackToken) {
-                $this->sendSlackMessage('#'.$model->identifier.' | '.$model->getServerName().': '.$model->getErrorMessage(), $this->module->slackChannel);
+                $this->sendSlackMessage($this->generateSlackMessage($model), $this->module->slackChannel);
             }
             // send error email if recipients are provided.
             if (!empty($this->module->recipient)) {
@@ -56,6 +56,30 @@ class DefaultController extends \luya\rest\Controller
         }
         
         return $this->sendModelError($model);
+    }
+    
+    /**
+     * 
+     * @param Data $model
+     * @return string
+     * @since 1.0.2
+     */
+    protected function generateSlackMessage(Data $model)
+    {
+        $infos = [
+            'ID' => $model->identifier,
+            'ServerName' => $model->getServerName(),
+            'Time' => strftime("%x - %X", $model->timestamp_create),
+            'requestUri' => $model->getErrorArrayKey('requestUri'),
+            'Message' => $model->getErrorMessage(),
+            'File' => $model->getErrorArrayKey('file'),
+        ];
+
+        $msg = [];
+        foreach (array_filter($infos) as $key => $value) {
+            $msg[] = $key . ': ' . $value;
+        }
+        return implode(PHP_EOL, $msg);
     }
     
     /**

@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. This projec
 
 ## 1.0.2 (in progress)
 
++ [#6](https://github.com/luyadev/luya-module-errorapi/issues/6) Add more informations to slack channel.
+
 ## 1.0.1 (15. January 2018)
 
 + Add email message VarDumper for content, ensure input encoding, cleanup code.
