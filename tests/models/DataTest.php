@@ -35,6 +35,6 @@ class DatTest extends ErrorApiTestCase
         
         $r = $this->invokeMethod($ctrl, 'generateSlackMessage', [$data]);
      
-        $this->assertSameTrimmed('ID: abcdefgh ServerName: https://luya.io Time: 11/29/73 - 21:33:09 requestUri: /path/url Message: exception msg', $r);
+        $this->assertSameTrimmed('ServerName: https://luya.io requestUri: /path/url Message: exception msg', $r);
     }
 }

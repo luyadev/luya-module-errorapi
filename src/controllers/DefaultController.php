@@ -59,6 +59,7 @@ class DefaultController extends \luya\rest\Controller
     }
     
     /**
+     * Generate a slack message for the current Data model.
      * 
      * @param Data $model
      * @return string
@@ -67,9 +68,7 @@ class DefaultController extends \luya\rest\Controller
     protected function generateSlackMessage(Data $model)
     {
         $infos = [
-            'ID' => $model->identifier,
             'ServerName' => $model->getServerName(),
-            'Time' => strftime("%x - %X", $model->timestamp_create),
             'requestUri' => $model->getErrorArrayKey('requestUri'),
             'Message' => $model->getErrorMessage(),
             'File' => $model->getErrorArrayKey('file'),
