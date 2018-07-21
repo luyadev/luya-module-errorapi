@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. This project make usage of the [Yii Versioning Strategy](https://github.com/yiisoft/yii2/blob/master/docs/internals/versions.md).
 
-## 1.0.2 (in progress)
+## 1.0.2 (21. July 2018)
 
 + [#6](https://github.com/luyadev/luya-module-errorapi/issues/6) Add more informations to slack channel.
 
