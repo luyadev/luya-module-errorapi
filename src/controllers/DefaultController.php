@@ -40,6 +40,16 @@ class DefaultController extends \luya\rest\Controller
         $model->error_json = Yii::$app->request->post('error_json', null);
         
         if ($model->save()) {
+
+            // https://docs.sentry.io/enriching-error-data/context/?platform=php
+            $dsn = 'https://x@sentry.io/x'; // https://x@sentry.io/x
+            \Sentry\init(['dsn' => $dsn]);
+            \Sentry\configureScope(function (\Sentry\State\Scope $scope) use($model): void {
+                $scope->setTag('get', implode(", ", $model->getErrorArrayKey('get')));
+              });
+            \Sentry\captureMessage($model->getErrorMessage());
+            
+
             // send slack message if enabled
             if ($this->module->slackToken) {
                 $this->sendSlackMessage($this->generateSlackMessage($model), $this->module->slackChannel);
