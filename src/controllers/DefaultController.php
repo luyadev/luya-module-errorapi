@@ -43,6 +43,8 @@ class DefaultController extends \luya\rest\Controller
 
             // https://docs.sentry.io/enriching-error-data/context/?platform=php
             $dsn = 'https://x@sentry.io/x'; // https://x@sentry.io/x
+            
+            // scope trace? see: https://github.com/olegtsvetkov/yii2-sentry/blob/master/src/LogTarget.php#L60
             \Sentry\init(['dsn' => $dsn]);
             \Sentry\configureScope(function (\Sentry\State\Scope $scope) use($model): void {
                 $scope->setTag('get', implode(", ", $model->getErrorArrayKey('get')));
