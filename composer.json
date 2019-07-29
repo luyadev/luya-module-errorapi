@@ -16,7 +16,8 @@
 		"sentry/sdk" : "^2.0"
 	},
 	"require-dev" : {
-	   "luyadev/luya-testsuite" : "^1.0"
+	   "luyadev/luya-testsuite" : "^1.0",
+	   "vlucas/phpdotenv": "^2.5"
 	},
 	"support" : {
 		"issues" : "https://github.com/luyadev/luya-module-errorapi/issues"

@@ -100,18 +100,18 @@ class Data extends ActiveRecord
      * Get a sepcific key from error array.
      *
      * @param string $key
-     * @return boolean
+     * @return mixed
      * @since 1.0.1
      */
-    public function getErrorArrayKey($key)
+    public function getErrorArrayKey($key, $default = false)
     {
-        return isset($this->getErrorArray()[$key]) ? $this->getErrorArray()[$key] : false;
+        return isset($this->getErrorArray()[$key]) ? $this->getErrorArray()[$key] : $default;
     }
     
     /**
      * Get error message from error array.
      *
-     * @return boolean
+     * @return string
      * @since 1.0.1
      */
     public function getErrorMessage()
@@ -121,12 +121,92 @@ class Data extends ActiveRecord
     
     /**
      * Get Server name from error array.
-     * @return boolean
+     * @return string
      * @since 1.0.1
      */
     public function getServerName()
     {
         return $this->getErrorArrayKey('serverName');
+    }
+
+    public function getFile()
+    {
+        return $this->getErrorArrayKey('file');
+    }
+
+    public function getLine()
+    {
+        return $this->getErrorArrayKey('line');
+    }
+
+    public function getRequestUri()
+    {
+        return $this->getErrorArrayKey('requestUri');
+    }
+
+    public function getDate()
+    {
+        return $this->getErrorArrayKey('date');
+    }
+    
+    public function getIp()
+    {
+        return $this->getErrorArrayKey('ip');
+    }
+
+    public function getGet()
+    {
+        return $this->getErrorArrayKey('get', []);
+    }
+
+    public function getPost()
+    {
+        return $this->getErrorArrayKey('post', []);
+    }
+    
+    public function getBodyParams()
+    {
+        return $this->getErrorArrayKey('bodyParams', []);
+    }
+
+    public function getSession()
+    {
+        return $this->getErrorArrayKey('session', []);
+    }
+
+    public function getServer()
+    {
+        return $this->getErrorArrayKey('server', []);
+    }
+
+    public function getProfiling()
+    {
+        return $this->getErrorArrayKey('profiling', []);
+    }
+
+    public function getLogger()
+    {
+        return $this->getErrorArrayKey('logger', []);
+    }
+
+    /**
+     * Get an array with trace objects if present.
+     *
+     * @return Trace[]
+     */
+    public function getTrace()
+    {
+        $trace = [];
+        foreach ($this->getErrorArrayKey('trace', []) as $nr => $content) {
+            $trace[$nr] = new Trace([
+                'file' => $content['file'],
+                'line' => $content['line'],
+                'function' => $content['function'],
+                'class' => $content['class'],
+            ]);
+        }
+
+        return $trace;
     }
 
     /**

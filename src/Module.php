@@ -32,6 +32,8 @@ final class Module extends \luya\base\Module implements CoreModuleInterface
      * @since 1.0.1
      */
     public $issueCreateRepo = 'https://github.com/luyadev/luya';
+
+    public $adapters = [];
     
     /**
      * @inheritdoc
