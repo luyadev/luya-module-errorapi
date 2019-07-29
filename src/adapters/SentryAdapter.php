@@ -93,32 +93,5 @@ class SentryAdapter extends BaseIntegrationAdapter
         $firstKey = current($dr);
 
         return $firstKey['dsn']['public'];
-        /*
-        $token = '7d9028892435403687054cb489248d31a6fa1dd0d22e4651b52163fd4d184b4e';
-        $org = 'zephir';
-        $team = 'zephir';
-
-        $curl = new Curl();
-        $curl->setHeader('Authorization', 'Bearer '. $token);
-
-        $c = $curl->post("https://sentry.io/api/0/teams/{$org}/{$team}/projects/", [
-            'name' => 'My Project!',
-            'slug' => $slug
-        ]);
-
-        $data = json_decode($c->response, true);
-
-        $slug = $data['slug'];
-
-
-        // get dsn:
-
-        $d = $curl->get("https://sentry.io/api/0/projects/{$org}/{$slug}/keys/");
-
-        var_dump($d);
-        $dr = json_decode($d->response, true);
-
-        var_dump($dr);
-        */
     }
 }
