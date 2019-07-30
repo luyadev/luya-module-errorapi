@@ -23,7 +23,7 @@ class SlackAdapter extends BaseIntegrationAdapter
      * @return string
      * @since 1.0.2
      */
-    protected function generateSlackMessage(Data $model)
+    public function generateSlackMessage(Data $model)
     {
         $infos = [
             'ServerName' => $model->getServerName(),
@@ -46,7 +46,7 @@ class SlackAdapter extends BaseIntegrationAdapter
      * @param string $channel The channel where the message should appear.
      * @return mixed
      */
-    protected function sendSlackMessage($message, $channel, $token)
+    public function sendSlackMessage($message, $channel, $token)
     {
         $ch = curl_init('https://slack.com/api/chat.postMessage');
         $data = http_build_query([

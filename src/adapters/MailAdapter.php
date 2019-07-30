@@ -12,7 +12,7 @@ class MailAdapter extends BaseIntegrationAdapter
 
     public function onCreate(Data $data)
     {
-        Yii::$app->mail
+        return Yii::$app->mail
             ->compose($data->getServerName() . ' Error', $this->renderMail($data))
             ->addresses((array) $this->recipient)
             ->send();    

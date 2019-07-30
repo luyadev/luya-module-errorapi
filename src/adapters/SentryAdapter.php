@@ -23,20 +23,25 @@ class SentryAdapter extends BaseIntegrationAdapter
         $dsn = $this->getProjectDsn($data, $slug);
         
        
-        Sentry\init(['dsn' => $dsn]);
+        Sentry\init([
+            'dsn' => $dsn,
+            'environment' => 'prod',
+            'server_name' => $data->getServerName(),
+        ]);
         
         Sentry\configureScope(function (Scope $scope) use($data): void {
 
-            $this->setTag($scope, 'user', $data->getIp());
-            $this->setTag($scope, 'user', $data->getIp());
             $this->setTag($scope, 'server_name', $data->getServerName());
             $this->setTag($scope, 'line', $data->getLine());
             $this->setTag($scope, 'file', $data->getFile());
             $this->setTag($scope, 'request_uri', $data->getRequestUri());
+            
+            $scope->setUser(['ip_address' => $data->getIp()]);
 
 
             // TRACES
             // @see scope trace? see: https://github.com/olegtsvetkov/yii2-sentry/blob/master/src/LogTarget.php#L60
+            /*
             $traces = [];
             foreach ($data->getTrace() as $trace) {
                 $traces[] = "in {$trace->file}:{$trace->line}";            }
@@ -44,7 +49,7 @@ class SentryAdapter extends BaseIntegrationAdapter
             if (!empty($traces)) {
                 $scope->setExtra('traces', $traces);
             }
-
+            */
             // configure fingerprint identifier
             $scope->setFingerprint([
                 $data->getErrorMessage(),
@@ -57,10 +62,10 @@ class SentryAdapter extends BaseIntegrationAdapter
                 }
             }
 
+            $r = Sentry\captureMessage($data->getErrorMessage());
         });
-        $r = Sentry\captureMessage($data->getErrorMessage());
 
-        return (bool) $r;
+        return true;
     }
 
     private function setTag(Scope $scope, $key, $value)

@@ -13,6 +13,8 @@ class MailAdapterTest extends ErrorApiTestCase
         $adapter = new MailAdapter();
         $adapter->setModule($this->app->getModule('errorapi'));
         $fixture = $this->getDataFixture();
+
+        $this->assertFalse($adapter->onCreate($this->fixture->getModel('model1')));
         
         $data = new Data();
         $data->error_json = json_encode([

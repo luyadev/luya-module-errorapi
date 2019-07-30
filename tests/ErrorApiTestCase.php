@@ -41,19 +41,43 @@ class ErrorApiTestCase extends WebApplicationTestCase
         ];
     }
 
+    /**
+     * @var NgRestModelFixture
+     */
+    public $fixture;
 
-    public function getDataFixture()
+    public function afterSetup()
     {
-        return (new NgRestModelFixture([
+        parent::afterSetup();
+
+        $this->fixture = (new NgRestModelFixture([
             'modelClass' => Data::class,
             'fixtureData' => [
                 'model1' => [
-                    'id' => 1,
+                    'id' => rand(2,2000),
                     'timestamp_create' => 123456789,
                     'error_json' => '{"message":"exception msg", "serverName": "https://luya.io", "requestUri": "/path/url"}',
                     'identifier' => 'abcdefgh',
                 ],
             ]
         ]));
+    }
+
+    /**
+     *
+     * @return NgRestModelFixture
+     */
+    public function getDataFixture()
+    {
+        return $this->fixture;
+    }
+
+    public function beforeTearDown()
+    {
+        parent::beforeTearDown();
+
+        if ($this->fixture) {
+            $this->fixture->cleanup();
+        }
     }
 }
