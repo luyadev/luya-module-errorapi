@@ -5,6 +5,7 @@ namespace luya\errorapi\models;
 use luya\errorapi\Module;
 use yii\db\ActiveRecord;
 use yii\helpers\Json;
+use WhichBrowser\Parser;
 
 /**
  * Error Data Model.
@@ -174,9 +175,19 @@ class Data extends ActiveRecord
         return $this->getErrorArrayKey('session', []);
     }
 
-    public function getServer()
+    public function getServer($key = null)
     {
-        return $this->getErrorArrayKey('server', []);
+        $server = $this->getErrorArrayKey('server', []);
+
+        if (empty($server)) {
+            return false;
+        }
+
+        if ($key) {
+            return isset($server[$key]) ? $server[$key] : false;
+        }
+
+        return $server;
     }
 
     public function getProfiling()
@@ -187,6 +198,16 @@ class Data extends ActiveRecord
     public function getLogger()
     {
         return $this->getErrorArrayKey('logger', []);
+    }
+
+    /**
+     * Get Which Browser
+     *
+     * @return Parser
+     */
+    public function getWhichBrowser()
+    {
+        return new Parser($this->getServer('HTTP_USER_AGENT'));
     }
 
     /**
