@@ -14,7 +14,7 @@ class MailAdapter extends BaseIntegrationAdapter
     {
         Yii::$app->mail
             ->compose($data->getServerName() . ' Error', $this->renderMail($data))
-            ->addresses($this->recipient)
+            ->addresses((array) $this->recipient)
             ->send();    
     }
     
