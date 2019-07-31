@@ -13,7 +13,6 @@
 		}
 	],
 	"require": {
-		"sentry/sdk" : "^2.0",
 		"whichbrowser/parser": "^2.0"
 	},
 	"require-dev" : {

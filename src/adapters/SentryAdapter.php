@@ -2,13 +2,10 @@
 
 namespace luya\errorapi\adapters;
 
-use Sentry;
 use luya\errorapi\BaseIntegrationAdapter;
 use luya\errorapi\models\Data;
 use luya\helpers\Inflector;
 use Curl\Curl;
-use Sentry\State\Scope;
-use yii\helpers\Html;
 use luya\Exception;
 use yii\helpers\Json;
 
@@ -41,7 +38,7 @@ class SentryAdapter extends BaseIntegrationAdapter
         return $frames;
     }
 
-    private function genearteContexts(Data $data)
+    private function generateContext(Data $data)
     {
         $contexts = [];
         // os
@@ -66,22 +63,14 @@ class SentryAdapter extends BaseIntegrationAdapter
     }
 
     /**
-     * Undocumented function
+     * Genereate the store payload
      *
      * @see https://docs.sentry.io/development/sdk-dev/attributes/
      * @param Data $data
-     * @return void
+     * @return array
      */
-    private function generateEventArray(Data $data)
+    private function generateStorePayload(Data $data)
     {
-        /*"contexts":{  
-      "runtime":{  
-         "version":"7.2.10",
-         "type":"runtime",
-         "name":"php"
-      }
-   },
-   */
         return array_filter([
             'transaction' => $data->getFile(),
             'server_name' => $data->getServerName(),
@@ -101,7 +90,7 @@ class SentryAdapter extends BaseIntegrationAdapter
             ],
             'environment' => 'prod',
             'level' => 'error',
-            'contexts' => $this->genearteContexts($data),
+            'contexts' => $this->generateContext($data),
             'tags' => [
                 'luya_version' => '1.0',
                 'file' => $data->getFile(),
@@ -142,9 +131,7 @@ class SentryAdapter extends BaseIntegrationAdapter
 
         $curl = new Curl();
         $curl->setHeader('Content-Type', 'application/json');
-        $r = $curl->post($url, Json::encode($this->generateEventArray($data)));
-        
-        return $r->isSuccess();
+        return $curl->post($url, Json::encode($this->generateStorePayload($data)))->isSuccess();
     }
 
     public function getAuth(Data $data, $slug)
@@ -154,16 +141,15 @@ class SentryAdapter extends BaseIntegrationAdapter
 
         $hasProject = $curl->get("/api/0/projects/{$this->organisation}/{$slug}/");
 
-        
+        // create the project if not exists
         if (!$hasProject->isSuccess()) {
             $createProject = $curl->post("https://sentry.io/api/0/teams/{$this->organisation}/{$this->team}/projects/", [
                 'name' => $data->getServerName(),
                 'slug' => $slug
             ]);
-
         }
 
-        // get dsn
+        // get project id with credentials
 
         $keys = $curl->get("https://sentry.io/api/0/projects/{$this->organisation}/{$slug}/keys/");
 
