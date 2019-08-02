@@ -3,38 +3,13 @@
 namespace tests\web\luya\errorapi\models;
 
 use luya\errorapi\tests\ErrorApiTestCase;
-use luya\testsuite\fixtures\NgRestModelFixture;
-use luya\errorapi\models\Data;
-use luya\errorapi\controllers\DefaultController;
 
-class DatTest extends ErrorApiTestCase
+class DataTest extends ErrorApiTestCase
 {
-    public function testSlackMessage()
+    public function testGetter()
     {
-        $model = (new NgRestModelFixture([
-            'modelClass' => Data::class,
-            'fixtureData' => [
-                'model1' => [
-                    'id' => 1,
-                    'timestamp_create' => 123456789,
-                    'error_json' => '{"message":"exception msg", "serverName": "https://luya.io", "requestUri": "/path/url"}',
-                    'identifier' => 'abcdefgh',
-                ],
-            ]
-        ]));
+        $model = $this->fixture->getModel('model1');
 
-        /* @var Data $data */
-        $data = $model->getModel('model1');
-        
-        $this->assertSame('exception msg', $data->getErrorMessage());
-        $this->assertSame('https://luya.io', $data->getServerName());
-        
-        
-        // generate slack message in controller
-        $ctrl = new DefaultController('default', $this->app);
-        
-        $r = $this->invokeMethod($ctrl, 'generateSlackMessage', [$data]);
-     
-        $this->assertSameTrimmed('ServerName: https://luya.io requestUri: /path/url Message: exception msg', $r);
-    }
+        $this->assertFalse($model->getIp());
+    }   
 }

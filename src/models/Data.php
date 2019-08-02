@@ -5,6 +5,7 @@ namespace luya\errorapi\models;
 use luya\errorapi\Module;
 use yii\db\ActiveRecord;
 use yii\helpers\Json;
+use WhichBrowser\Parser;
 
 /**
  * Error Data Model.
@@ -100,18 +101,18 @@ class Data extends ActiveRecord
      * Get a sepcific key from error array.
      *
      * @param string $key
-     * @return boolean
+     * @return mixed
      * @since 1.0.1
      */
-    public function getErrorArrayKey($key)
+    public function getErrorArrayKey($key, $default = false)
     {
-        return isset($this->getErrorArray()[$key]) ? $this->getErrorArray()[$key] : false;
+        return isset($this->getErrorArray()[$key]) ? $this->getErrorArray()[$key] : $default;
     }
     
     /**
      * Get error message from error array.
      *
-     * @return boolean
+     * @return string
      * @since 1.0.1
      */
     public function getErrorMessage()
@@ -121,12 +122,163 @@ class Data extends ActiveRecord
     
     /**
      * Get Server name from error array.
-     * @return boolean
+     * @return string
      * @since 1.0.1
      */
     public function getServerName()
     {
         return $this->getErrorArrayKey('serverName');
+    }
+
+    /**
+     * Get file
+     *
+     * @return string
+     * @since 2.0.0
+     */
+    public function getFile()
+    {
+        return $this->getErrorArrayKey('file');
+    }
+
+    /**
+     * Line
+     *
+     * @return string
+     * @since 2.0.0
+     */
+    public function getLine()
+    {
+        return $this->getErrorArrayKey('line');
+    }
+
+    /**
+     * Request URI
+     *
+     * @return string
+     * @since 2.0.0
+     */
+    public function getRequestUri()
+    {
+        return $this->getErrorArrayKey('requestUri');
+    }
+
+    /**
+     * Date
+     *
+     * @return string
+     * @since 2.0.0
+     */
+    public function getDate()
+    {
+        return $this->getErrorArrayKey('date');
+    }
+    
+    /**
+     * User IP
+     *
+     * @return string
+     * @since 2.0.0
+     */
+    public function getIp()
+    {
+        return $this->getErrorArrayKey('ip');
+    }
+
+    /**
+     * Get Data
+     *
+     * @return array
+     * @since 2.0.0
+     */
+    public function getGet()
+    {
+        return $this->getErrorArrayKey('get', []);
+    }
+
+    /**
+     * Post Data
+     *
+     * @return array
+     * @since 2.0.0
+     */
+    public function getPost()
+    {
+        return $this->getErrorArrayKey('post', []);
+    }
+    
+    /**
+     * Body Params
+     *
+     * @return array
+     * @since 2.0.0
+     */
+    public function getBodyParams()
+    {
+        return $this->getErrorArrayKey('bodyParams', []);
+    }
+
+    /**
+     * Session
+     *
+     * @return array
+     * @since 2.0.0
+     */
+    public function getSession()
+    {
+        return $this->getErrorArrayKey('session', []);
+    }
+
+    /**
+     * Server Data
+     *
+     * @param string $key An optional server array key to access.
+     * @return array|string
+     * @since 2.0.0
+     */
+    public function getServer($key = null)
+    {
+        $server = $this->getErrorArrayKey('server', []);
+
+        if (empty($server)) {
+            return false;
+        }
+
+        if ($key) {
+            return isset($server[$key]) ? $server[$key] : false;
+        }
+
+        return $server;
+    }
+    
+    /**
+     * Get Which Browser
+     *
+     * @return Parser
+     */
+    public function getWhichBrowser()
+    {
+        return new Parser($this->getServer('HTTP_USER_AGENT'));
+    }
+
+    /**
+     * Get an array with trace objects if present.
+     *
+     * @return Trace[]
+     */
+    public function getTrace()
+    {
+        $trace = [];
+        foreach ($this->getErrorArrayKey('trace', []) as $nr => $content) {
+            $trace[$nr] = new Trace([
+                'file' => $content['file'],
+                'line' => $content['line'],
+                'function' => $content['function'],
+                'class' => $content['class'],
+            ]);
+        }
+
+        return $trace;
     }
 
     /**

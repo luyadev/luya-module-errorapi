@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 In order to read more about upgrading and BC breaks have a look at the [UPGRADE Document](UPGRADE.md).
 
+## 2.0.0 ()
+
++ [#9](https://github.com/luyadev/luya-module-errorapi/pull/9) Switch to single adapters in order to make integrations more flexible. Therfore new sentry adapter integration is possible.
+
 ## 1.0.2 (21. July 2018)
 
 + [#6](https://github.com/luyadev/luya-module-errorapi/issues/6) Add more informations to slack channel.
