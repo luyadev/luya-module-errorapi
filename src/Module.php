@@ -13,27 +13,29 @@ use luya\base\CoreModuleInterface;
 final class Module extends \luya\base\Module implements CoreModuleInterface
 {
     /**
-     * @var array Mail recipients.
+     * @var array The adapters integrated to send the error informations. For example
+     * 
+     * ```php
+     * 'adapters' => [
+     *     [
+     *         'class' => 'luya\errorapi\adapters\MailAdapter',
+     *         'recipient' => ['errors@example.com'],
+     *     ],
+     *     [
+     *         'class' => 'luya\errorapi\adapters\SlackAdapter',
+     *         'token' => 'YOUR_SECRET_SLACK_TOKEN',
+     *     ],
+     * ]
+     * ```
+     * @since 2.0.0
      */
-    public $recipient = [];
-
-    /**
-     * @var string The token which should be used to call the slack api. If not defined slack call is disabled.
-     */
-    public $slackToken;
-    
-    /**
-     * @var string The channel where the slack message should be pushed to.
-     */
-    public $slackChannel = '#luya';
+    public $adapters = [];
 
     /**
      * @var string The link to the "create issue" button.
      * @since 1.0.1
      */
     public $issueCreateRepo = 'https://github.com/luyadev/luya';
-
-    public $adapters = [];
     
     /**
      * @inheritdoc

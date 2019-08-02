@@ -130,51 +130,112 @@ class Data extends ActiveRecord
         return $this->getErrorArrayKey('serverName');
     }
 
+    /**
+     * Get file
+     *
+     * @return string
+     * @since 2.0.0
+     */
     public function getFile()
     {
         return $this->getErrorArrayKey('file');
     }
 
+    /**
+     * Line
+     *
+     * @return string
+     * @since 2.0.0
+     */
     public function getLine()
     {
         return $this->getErrorArrayKey('line');
     }
 
+    /**
+     * Request URI
+     *
+     * @return string
+     * @since 2.0.0
+     */
     public function getRequestUri()
     {
         return $this->getErrorArrayKey('requestUri');
     }
 
+    /**
+     * Date
+     *
+     * @return string
+     * @since 2.0.0
+     */
     public function getDate()
     {
         return $this->getErrorArrayKey('date');
     }
     
+    /**
+     * User IP
+     *
+     * @return string
+     * @since 2.0.0
+     */
     public function getIp()
     {
         return $this->getErrorArrayKey('ip');
     }
 
+    /**
+     * Get Data
+     *
+     * @return array
+     * @since 2.0.0
+     */
     public function getGet()
     {
         return $this->getErrorArrayKey('get', []);
     }
 
+    /**
+     * Post Data
+     *
+     * @return array
+     * @since 2.0.0
+     */
     public function getPost()
     {
         return $this->getErrorArrayKey('post', []);
     }
     
+    /**
+     * Body Params
+     *
+     * @return array
+     * @since 2.0.0
+     */
     public function getBodyParams()
     {
         return $this->getErrorArrayKey('bodyParams', []);
     }
 
+    /**
+     * Session
+     *
+     * @return array
+     * @since 2.0.0
+     */
     public function getSession()
     {
         return $this->getErrorArrayKey('session', []);
     }
 
+    /**
+     * Server Data
+     *
+     * @param string $key An optional server array key to access.
+     * @return array|string
+     * @since 2.0.0
+     */
     public function getServer($key = null)
     {
         $server = $this->getErrorArrayKey('server', []);
@@ -189,17 +250,7 @@ class Data extends ActiveRecord
 
         return $server;
     }
-
-    public function getProfiling()
-    {
-        return $this->getErrorArrayKey('profiling', []);
-    }
-
-    public function getLogger()
-    {
-        return $this->getErrorArrayKey('logger', []);
-    }
-
+    
     /**
      * Get Which Browser
      *

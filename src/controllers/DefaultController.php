@@ -41,7 +41,7 @@ class DefaultController extends \luya\rest\Controller
         $model->error_json = Yii::$app->request->post('error_json', null);
         
         if ($model->save()) {
-
+            // generate the adapater objects
             foreach ($this->module->adapters as $adapterConfig) {
                 /** @var BaseIntegrationAdapter $object */
                 $object = Yii::createObject($adapterConfig);

@@ -5,11 +5,33 @@ namespace luya\errorapi\adapters;
 use Yii;
 use luya\errorapi\BaseIntegrationAdapter;
 use luya\errorapi\models\Data;
+use yii\base\InvalidConfigException;
 
+/**
+ * E-Mail integration
+ * 
+ * @since 2.0.0
+ * @author Basil Suter <basil@nadar.io>
+ */
 class MailAdapter extends BaseIntegrationAdapter
 {
     public $recipient = [];
 
+    /**
+     * {@inheritDoc}
+     */
+    public function init()
+    {
+        parent::init();
+
+        if (empty($this->recipient)) {
+            throw new InvalidConfigException("The mail adapter recipient property can not be empty.");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function onCreate(Data $data)
     {
         return Yii::$app->mail

@@ -10,7 +10,7 @@ class MailAdapterTest extends ErrorApiTestCase
 {
     public function testAdapter()
     {
-        $adapter = new MailAdapter();
+        $adapter = new MailAdapter(['recipient' => 'foobar@example.com']);
         $adapter->setModule($this->app->getModule('errorapi'));
         $fixture = $this->getDataFixture();
 

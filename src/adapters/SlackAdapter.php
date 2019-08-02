@@ -4,13 +4,43 @@ namespace luya\errorapi\adapters;
 
 use luya\errorapi\BaseIntegrationAdapter;
 use luya\errorapi\models\Data;
+use yii\base\InvalidConfigException;
 
+/**
+ * Slack Adapter.
+ * 
+ * @author Basil Suter <basil@nadar.io>
+ * @since 2.0.0
+ */
 class SlackAdapter extends BaseIntegrationAdapter
 {
-    public $channel;
+    /**
+     * @var string The channel to post the slack message. Default is #luya
+     */
+    public $channel = '#luya';
+
+    /**
+     * @var string The token
+     * @see https://api.slack.com/custom-integrations/legacy-tokens
+     */
     public $token;
 
-    public function onCreate(\luya\errorapi\models\Data $data)
+    /**
+     * {@inheritDoc}
+     */
+    public function init()
+    {
+        parent::init();
+
+        if (empty($this->token)) {
+            throw new InvalidConfigException("The slack adapter token property can not be empty.");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function onCreate(Data $data)
     {
         $message = $this->generateSlackMessage($data);
         $this->sendSlackMessage($message, $this->channel, $this->token);

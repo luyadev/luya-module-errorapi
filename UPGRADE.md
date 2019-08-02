@@ -4,7 +4,7 @@ This document will help you upgrading from a LUYA admin module version into anot
 
 ## from 1.0 to 2.0 (in progress)
 
-+ module propertys `recipient` and `slackToken` has been removed.
++ module propertys `recipient`, `slackToken` and `slackChannel` has been removed.
 + Adapters replace the current default mail and slack properties, therefore configure a MailAdapter and/or a SlackAdapter.
 
 Old config:

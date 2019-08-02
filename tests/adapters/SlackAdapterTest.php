@@ -11,7 +11,7 @@ class SlackAdapterTest extends ErrorApiTestCase
     {
         $model = $this->getDataFixture();
 
-        $adapter = new SlackAdapter();
+        $adapter = new SlackAdapter(['token' => 'barfo']);
 
         $message  = $adapter->generateSlackMessage($this->getDataFixture()->getModel('model1'));
 
