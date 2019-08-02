@@ -112,7 +112,7 @@ class SentryAdapter extends BaseIntegrationAdapter
      * @param Data $data
      * @return array
      */
-    private function generateStackTraceFrames(Data $data)
+    public function generateStackTraceFrames(Data $data)
     {
         $frames = [];
         foreach ($data->getTrace() as $trace) {
@@ -133,7 +133,7 @@ class SentryAdapter extends BaseIntegrationAdapter
      * @param Data $data
      * @return array
      */
-    private function generateContext(Data $data)
+    public function generateContext(Data $data)
     {
         $contexts = [];
         // os
@@ -164,7 +164,7 @@ class SentryAdapter extends BaseIntegrationAdapter
      * @param Data $data
      * @return array
      */
-    private function generateStorePayload(Data $data)
+    public function generateStorePayload(Data $data)
     {
         return array_filter([
             'transaction' => $data->getFile(),
