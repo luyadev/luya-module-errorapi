@@ -155,6 +155,7 @@ class Data extends ActiveRecord
     /**
      * Request URI
      *
+     * @todo use luya\helpers\Url::cleanHost
      * @return string
      * @since 2.0.0
      */
@@ -227,6 +228,41 @@ class Data extends ActiveRecord
     public function getSession()
     {
         return $this->getErrorArrayKey('session', []);
+    }
+
+    public function getYiiDebug()
+    {
+        return $this->getErrorArrayKey('yii_debug');
+    }
+
+    public function getYiiEnv()
+    {
+        return $this->getErrorArrayKey('yii_env', 'prod');
+    }
+
+    public function getStatusCode()
+    {
+        return $this->getErrorArrayKey('status_code');
+    }
+
+    public function getExceptionName()
+    {
+        return $this->getErrorArrayKey('exception_name');
+    }
+
+    public function getExceptionClassName()
+    {
+        return $this->getErrorArrayKey('exception_class_name', 'Exception');
+    }
+
+    public function getPhpVersion()
+    {
+        return $this->getErrorArrayKey('php_version', 'unknown');
+    }
+
+    public function getLuyaVersion()
+    {
+        return $this->getErrorArrayKey('luya_version', 'unknown');
     }
 
     /**

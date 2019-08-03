@@ -80,7 +80,7 @@ class SentryAdapterTest extends ErrorApiTestCase
             'team' => getenv('sentryTeam')
         ]);
 
-        $this->assertSame([
+        $expect = [
             'transaction' => '/vendor/yiisoft/yii2/filters/auth/AuthMethod.php',
             'server_name' => 'mytestdomain.com',
             'metadata' => array (
@@ -88,8 +88,8 @@ class SentryAdapterTest extends ErrorApiTestCase
                 'filename' => '/vendor/yiisoft/yii2/filters/auth/AuthMethod.php',
             ),
             'fingerprint' => array (
-                0 => '{{ default }}',
-                1 => '/admin/api-admin-storage/file-replace',
+                0 => 'Your request was made with invalid credentials.',
+                1 => '/admin/api-admin-storage/file-replace'
             ),
             'logger' => 'luya.errorapi',
             'platform' => 'php',
@@ -112,7 +112,8 @@ class SentryAdapterTest extends ErrorApiTestCase
                 )
             ),
             'tags' => array (
-                'luya_version' => '1.0',
+                'luya_version' => 'unknown',
+                'php_version' => 'unknown',
                 'file' => '/vendor/yiisoft/yii2/filters/auth/AuthMethod.php',
                 'url' => 'http://mytestdomain.com/admin/api-admin-storage/file-replace',
             ),
@@ -155,6 +156,10 @@ class SentryAdapterTest extends ErrorApiTestCase
                     'SCRIPT_FILENAME' => '/var/www/html/current/public_html/index.php',
                 ),
                 'session' => array (),
+                'yii_debug' => false,
+                'yii_env' => 'prod',
+                'http_status_code' => false,
+                'exception_name' => false,
             ),
             'exception' => array (
                 'values' => array (
@@ -168,19 +173,29 @@ class SentryAdapterTest extends ErrorApiTestCase
                                     'function' => 'handleFailure',
                                     'lineno' => 76,
                                     'module' => 'AuthMethod',
+                                    'context_line' => null,
+                                    'pre_context' => null,
+                                    'post_context' => null,
+                                    'abs_path' => null,
                                 ),
                                 1 => array (
                                     'filename' => '/vendor/yiisoft/yii2/filters/auth/CompositeAuth.php',
                                     'function' => 'beforeAction',
                                     'lineno' => 57,
                                     'module' => 'AuthMethod',
+                                    'context_line' => null,
+                                    'pre_context' => null,
+                                    'post_context' => null,
+                                    'abs_path' => null,
                                 )
                             )
                         )
                     )
                 )
             )
-            ], $adapter->generateStorePayload($model));
+        ];
+        
+        $this->assertSame($expect, $adapter->generateStorePayload($model));
 
         $this->assertTrue($adapter->onCreate($model));
     }

@@ -10,4 +10,10 @@ class Trace extends BaseObject
     public $line;
     public $function;
     public $class;
+
+    // since luya core version 1.0.20
+    public $context_line;
+    public $pre_context;
+    public $post_context;
+    public $abs_path;
 }

@@ -50,7 +50,10 @@ class SentryAdapter extends BaseIntegrationAdapter
      */
     public function onCreate(Data $data)
     {
-        $slug = Inflector::slug($data->getServerName());
+        $serverName = $data->getServerName();
+        // in version 1.0.20 use:
+        // $serverName = Url::domain($serverName);
+        $slug = Inflector::slug($serverName);
 
         $auth = $this->getAuth($data, $slug);
 
@@ -121,6 +124,10 @@ class SentryAdapter extends BaseIntegrationAdapter
                 'function' => $trace->function,
                 'lineno' => $trace->line,
                 'module' => $trace->class,
+                'context_line' => $trace->context_line,
+                'pre_context' => $trace->pre_context,
+                'post_context' => $trace->post_context,
+                'abs_path' => $trace->abs_path,
             ];
         }
 
@@ -184,13 +191,15 @@ class SentryAdapter extends BaseIntegrationAdapter
                 'name' => 'luya-errorapi',
                 'version' => '2.0.0',
             ],
-            'environment' => 'prod',
+            'environment' => $data->getYiiEnv(),
             'level' => 'error',
             'contexts' => $this->generateContext($data),
             'tags' => [
-                'luya_version' => '1.0', // @TODO wait for new luya core error message
+                'luya_version' => $data->getLuyaVersion(),
+                'php_version' => $data->getPhpVersion(),
                 'file' => $data->getFile(),
                 'url' => $data->getServer('SCRIPT_URI'),
+                // 'domain' => Url::domain($data->getServer('SCRIPT_URI')), // after luya cor release 1.0.20
             ],
             'user' => [
                 'ip_address' => $data->getIp(),
@@ -202,11 +211,15 @@ class SentryAdapter extends BaseIntegrationAdapter
                 'get' => $data->getGet(),
                 'server' => $data->getServer(),
                 'session' => $data->getSession(),
+                'yii_debug' => $data->getYiiDebug(),
+                'yii_env' => $data->getYiiEnv(),
+                'http_status_code' => $data->getStatusCode(),
+                'exception_name' => $data->getExceptionName(),
             ],
             'exception' => [
                 'values' => [
                     [
-                        'type' => 'Exception', // @TODO wait for new luya core error message
+                        'type' => $data->getExceptionClassName(),
                         'value' => $data->getErrorMessage(),
                         'stacktrace' => [
                             'frames' => $this->generateStackTraceFrames($data)
