@@ -174,7 +174,8 @@ class SentryAdapter extends BaseIntegrationAdapter
                 'filename' => $data->getFile(),
             ],
             'fingerprint' => [
-                '{{ default }}', // https://docs.sentry.io/data-management/rollups/
+                // '{{ default }}', // https://docs.sentry.io/data-management/rollups/,
+                $data->getErrorMessage(),
                 $data->getRequestUri(),
             ],
             'logger' => 'luya.errorapi',
