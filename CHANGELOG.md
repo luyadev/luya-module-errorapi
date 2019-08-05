@@ -5,7 +5,7 @@ In order to read more about upgrading and BC breaks have a look at the [UPGRADE 
 
 ## 2.0.0 (5. August 2019)
 
-+ [#9](https://github.com/luyadev/luya-module-errorapi/pull/9) Switch to single adapters in order to make integrations more flexible. Therfore new sentry adapter integration is possible.
++ [#9](https://github.com/luyadev/luya-module-errorapi/pull/9) Switch to single adapters in order to make integrations more flexible. Therefore new sentry adapter integration is possible.
 
 ## 1.0.2 (21. July 2018)
 
