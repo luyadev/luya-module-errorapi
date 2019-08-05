@@ -294,7 +294,7 @@ class Data extends ActiveRecord
      */
     public function getWhichBrowser()
     {
-        return new Parser($this->getServer('HTTP_USER_AGENT'));
+        return !empty($this->getServer('HTTP_USER_AGENT')) ? new Parser($this->getServer('HTTP_USER_AGENT')) : false;
     }
 
     /**
@@ -311,6 +311,10 @@ class Data extends ActiveRecord
                 'line' => $content['line'],
                 'function' => $content['function'],
                 'class' => $content['class'],
+                'context_line' => isset($content['context_line']) ? $content['context_line'] : null,
+                'pre_context' => isset($content['pre_context']) ? $content['pre_context'] : null,
+                'post_context' => isset($content['post_context']) ? $content['post_context'] : null,
+                'abs_path' => isset($content['abs_path']) ? $content['abs_path'] : null,
             ]);
         }
 

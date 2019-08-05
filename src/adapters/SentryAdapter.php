@@ -123,7 +123,7 @@ class SentryAdapter extends BaseIntegrationAdapter
                 'filename' => $trace->file,
                 'function' => $trace->function,
                 'lineno' => $trace->line,
-                'module' => $trace->class,
+                //'module' => $trace->class,
                 'context_line' => $trace->context_line,
                 'pre_context' => $trace->pre_context,
                 'post_context' => $trace->post_context,
@@ -158,6 +158,14 @@ class SentryAdapter extends BaseIntegrationAdapter
                 'version' => $data->getWhichBrowser()->browser->version->value,
                 'name' => $data->getWhichBrowser()->browser->name,
                 'type' => 'browser',
+            ];
+        }
+
+        if ($data->getPhpVersion()) {
+            $contexts['runtime'] = [
+                'version' => $data->getPhpVersion(),
+                'type' => 'runtime',
+                'name' => 'php',
             ];
         }
 

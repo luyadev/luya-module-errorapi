@@ -7,6 +7,95 @@ use luya\errorapi\adapters\SentryAdapter;
 
 class SentryAdapterTest extends ErrorApiTestCase
 {
+    public function testStackTraceFromProject()
+    {
+        $json = '{
+            "message": "SQLSTATE[42S02]: Base table or view not found: 1146 Table luya.cms_redirect doesnt exist\nThe SQL being executed was: SELECT * FROM cms_redirect",
+            "file": "/app/vendor/yiisoft/yii2/db/Schema.php",
+            "line": "674",
+            "requestUri": "/",
+            "serverName": "luya",
+            "date": "05.08.2019 15:46",
+            "trace": [
+              {
+                "file": "/app/vendor/yiisoft/yii2/db/Command.php",
+                "abs_path": "/app/vendor/yiisoft/yii2/db/Command.php",
+                "line": "1295",
+                "context_line": "                $e = $this->db->getSchema()->convertException($e, $rawSql);",
+                "pre_context": [
+                  "                } else {",
+                  "                    $this->pdoStatement->execute();",
+                  "                }",
+                  "                break;",
+                  "            } catch (\\\\Exception $e) {",
+                  "                $rawSql = $rawSql ?: $this->getRawSql();"
+                ],
+                "post_context": [
+                  "                if ($this->_retryHandler === null || !call_user_func($this->_retryHandler, $e, $attempt)) {",
+                  "                    throw $e;",
+                  "                }",
+                  "            }",
+                  "        }",
+                  "    }"
+                ],
+                "function": "convertException",
+                "class": "yii\\\\db\\\\Schema"
+              },
+              {
+                "file": "/app/vendor/yiisoft/yii2/db/Command.php",
+                "abs_path": "/app/vendor/yiisoft/yii2/db/Command.php",
+                "line": "123",
+                "context_line": "                $e = $this->db->getSchema()->convertException($e, $rawSql);",
+                "pre_context": [
+                  "                } else {",
+                  "                    $this->pdoStatement->execute();",
+                  "                }",
+                  "                break;",
+                  "            } catch (\\\\Exception $e) {",
+                  "                $rawSql = $rawSql ?: $this->getRawSql();"
+                ],
+                "post_context": [
+                  "                if ($this->_retryHandler === null || !call_user_func($this->_retryHandler, $e, $attempt)) {",
+                  "                    throw $e;",
+                  "                }",
+                  "            }",
+                  "        }",
+                  "    }"
+                ],
+                "function": "convertException",
+                "class": "yii\\\\db\\\\Schema"
+              }
+            ],
+            "ip": "172.31.0.1",
+            "get": [],
+            "post": [],
+            "bodyParams": [],
+            "session": [],
+            "yii_debug": "true",
+            "yii_env": "prod",
+            "status_code": "500",
+            "exception_name": "Database Exception",
+            "exception_class_name": "yii\\\\db\\\\Exception",
+            "php_version": "7.2.17",
+            "luya_version": "1.0.20"
+          }';
+
+          $model = $this->fixture->newModel;
+            $model->id = 123;
+            $model->identifier = 'xyz';
+            $model->error_json = $json;
+            $model->timestamp_create = time();
+            
+          $adapter = new SentryAdapter([
+            'token' => getenv('sentryToken'),
+            'organisation' => getenv('sentryOrganisation'),
+            'team' => getenv('sentryTeam')
+        ]);
+
+        $e = $adapter->generateStorePayload($model);
+        $this->assertTrue($adapter->onCreate($model));
+    }
+    
     public function testSentryAdapter()
     {
         $json = '{
@@ -109,6 +198,11 @@ class SentryAdapterTest extends ErrorApiTestCase
                     'version' => '75.0.3770.100',
                     'name' => 'Chrome',
                     'type' => 'browser',
+                ),
+                'runtime' => array (
+                    'version' => 'unknown',
+                    'type' => 'runtime',
+                    'name' => 'php'
                 )
             ),
             'tags' => array (
@@ -172,7 +266,6 @@ class SentryAdapterTest extends ErrorApiTestCase
                                     'filename' => '/vendor/yiisoft/yii2/filters/auth/AuthMethod.php',
                                     'function' => 'handleFailure',
                                     'lineno' => 76,
-                                    'module' => 'AuthMethod',
                                     'context_line' => null,
                                     'pre_context' => null,
                                     'post_context' => null,
@@ -182,7 +275,6 @@ class SentryAdapterTest extends ErrorApiTestCase
                                     'filename' => '/vendor/yiisoft/yii2/filters/auth/CompositeAuth.php',
                                     'function' => 'beforeAction',
                                     'lineno' => 57,
-                                    'module' => 'AuthMethod',
                                     'context_line' => null,
                                     'pre_context' => null,
                                     'post_context' => null,
@@ -197,6 +289,6 @@ class SentryAdapterTest extends ErrorApiTestCase
         
         $this->assertSame($expect, $adapter->generateStorePayload($model));
 
-        $this->assertTrue($adapter->onCreate($model));
+        //$this->assertTrue($adapter->onCreate($model));
     }
 }
