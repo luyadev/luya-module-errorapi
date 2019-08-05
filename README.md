@@ -39,6 +39,12 @@ After installation via Composer include the module to your configuration file wi
                 'class' => 'luya\errorapi\adapters\SlackAdapter',
                 'token' => 'xyz.xyz.xyz.xyz',
             ],
+            [
+                'class' => 'luya\errorapi\adapters\SentryAdapter',
+                'token' => 'YOUR_SENTRY_USER_AUTH_TOKEN',
+                'organisation' => 'organisationslug',
+                'team' => 'teamslug',
+            ]
         ],
     ],
 ]

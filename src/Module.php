@@ -25,6 +25,12 @@ final class Module extends \luya\base\Module implements CoreModuleInterface
      *         'class' => 'luya\errorapi\adapters\SlackAdapter',
      *         'token' => 'YOUR_SECRET_SLACK_TOKEN',
      *     ],
+     *     [
+     *         'class' => 'luya\errorapi\adapters\SentryAdapter',
+     *         'token' => 'YOUR_SENTRY_USER_AUTH_TOKEN',
+     *         'organisation' => 'organisationslug',
+     *         'team' => 'teamslug',
+     *     ]
      * ]
      * ```
      * @since 2.0.0
