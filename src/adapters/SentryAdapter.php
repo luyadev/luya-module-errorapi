@@ -9,6 +9,7 @@ use Curl\Curl;
 use luya\Exception;
 use yii\helpers\Json;
 use yii\base\InvalidConfigException;
+use luya\helpers\Url;
 
 /**
  * Sentry Integration.
@@ -50,9 +51,7 @@ class SentryAdapter extends BaseIntegrationAdapter
      */
     public function onCreate(Data $data)
     {
-        $serverName = $data->getServerName();
-        // in version 1.0.20 use:
-        // $serverName = Url::domain($serverName);
+        $serverName = Url::domain($data->getServerName());
         $slug = Inflector::slug($serverName);
 
         $auth = $this->getAuth($data, $slug);
@@ -84,7 +83,7 @@ class SentryAdapter extends BaseIntegrationAdapter
         // create the project if not exists
         if (!$hasProject->isSuccess()) {
             $curl->post("https://sentry.io/api/0/teams/{$this->organisation}/{$this->team}/projects/", [
-                'name' => $data->getServerName(),
+                'name' => Url::domain($data->getServerName()),
                 'slug' => $slug
             ]);
         }
