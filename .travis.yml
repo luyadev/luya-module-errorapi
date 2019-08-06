@@ -3,7 +3,6 @@ env:
     - CC_TEST_REPORTER_ID=6255786a39faec386baaedfa02d9fa7654d6fba246737554620c3226ea906d60
 language: php
 php:
-  - '7.0'
   - '7.1'
   - '7.2'
   - '7.3'

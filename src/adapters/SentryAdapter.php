@@ -51,17 +51,20 @@ class SentryAdapter extends BaseIntegrationAdapter
      */
     public function onCreate(Data $data)
     {
-        
-
         $auth = $this->getAuth($data);
-
         $url = 'https://sentry.io/api/'.$auth['id'].'/store/?sentry_version=5&sentry_key='.$auth['public'].'&sentry_secret='.$auth['secret'].'';
-
         $curl = new Curl();
         $curl->setHeader('Content-Type', 'application/json');
         return $curl->post($url, Json::encode($this->generateStorePayload($data)))->isSuccess();
     }
 
+    /**
+     * Generate the project slug from the given data server name.
+     *
+     * @param Data $data
+     * @return stirng
+     * @since 2.0.1
+     */
     public function generateProjectSlug(Data $data)
     {
         $serverName = Url::domain($data->getServerName());
@@ -76,8 +79,8 @@ class SentryAdapter extends BaseIntegrationAdapter
      * + secret:
      * 
      * @param Data $data
-     * @param string $slug The project name slug
      * @return array
+     * @throws Exception If an error while accessing the api appears, an exception is thrown.
      */
     public function getAuth(Data $data)
     {
