@@ -8,6 +8,9 @@
 [![Latest Stable Version](https://poser.pugx.org/luyadev/luya-module-errorapi/v/stable)](https://packagist.org/packages/luyadev/luya-module-errorapi)
 [![Total Downloads](https://poser.pugx.org/luyadev/luya-module-errorapi/downloads)](https://packagist.org/packages/luyadev/luya-module-errorapi)
 [![Slack Support](https://img.shields.io/badge/Slack-luyadev-yellowgreen.svg)](https://slack.luya.io/)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ae9ba69fc2644b5ef9be/maintainability)](https://codeclimate.com/github/luyadev/luya-module-errorapi/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/ae9ba69fc2644b5ef9be/test_coverage)](https://codeclimate.com/github/luyadev/luya-module-errorapi/test_coverage)
+[![Build Status](https://travis-ci.org/luyadev/luya-module-errorapi.svg?branch=master)](https://travis-ci.org/luyadev/luya-module-errorapi)
 
 For a solid and secure website, it is important to get notified about all the errors and exceptions that occur. This helps prevent unnoticed repeating errors and keeps customers happy as they won't have to complain.
 
