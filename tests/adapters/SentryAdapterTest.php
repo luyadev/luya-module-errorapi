@@ -14,7 +14,7 @@ class SentryAdapterTest extends ErrorApiTestCase
             "file": "/app/vendor/yiisoft/yii2/db/Schema.php",
             "line": "674",
             "requestUri": "/",
-            "serverName": "luya",
+            "serverName": "www.luya.io",
             "date": "05.08.2019 15:46",
             "trace": [
               {
@@ -92,8 +92,61 @@ class SentryAdapterTest extends ErrorApiTestCase
             'team' => getenv('sentryTeam')
         ]);
 
-        $e = $adapter->generateStorePayload($model);
-        $this->assertTrue($adapter->onCreate($model));
+
+        $this->assertSame('luya-io', $adapter->generateProjectSlug($model));
+
+        $payload = $adapter->generateStorePayload($model);
+
+        $trace = array (
+            0 => array (
+                'filename' => '/app/vendor/yiisoft/yii2/db/Command.php',
+                'function' => 'convertException',
+                'lineno' => '1295',
+                'context_line' => '                $e = $this->db->getSchema()->convertException($e, $rawSql);',
+                'pre_context' => array (
+                    0 => '                } else {',
+                    1 => '                    $this->pdoStatement->execute();',
+                    2 => '                }',
+                    3 => '                break;',
+                    4 => '            } catch (\Exception $e) {',
+                    5 => '                $rawSql = $rawSql ?: $this->getRawSql();',
+                ),
+                'post_context' => array  (
+                    0 => '                if ($this->_retryHandler === null || !call_user_func($this->_retryHandler, $e, $attempt)) {',
+                    1 => '                    throw $e;',
+                    2 => '                }',
+                    3 => '            }',
+                    4 => '        }',
+                    5 => '    }',
+                ),
+                'abs_path' => '/app/vendor/yiisoft/yii2/db/Command.php',
+            ),
+            1 => array (
+                'filename' => '/app/vendor/yiisoft/yii2/db/Command.php',
+                'function' => 'convertException',
+                'lineno' => '123',
+                'context_line' => '                $e = $this->db->getSchema()->convertException($e, $rawSql);',
+                'pre_context' => array (
+                    0 => '                } else {',
+                    1 => '                    $this->pdoStatement->execute();',
+                    2 => '                }',
+                    3 => '                break;',
+                    4 => '            } catch (\Exception $e) {',
+                    5 => '                $rawSql = $rawSql ?: $this->getRawSql();',
+                ),
+                'post_context' => array (
+                    0 => '                if ($this->_retryHandler === null || !call_user_func($this->_retryHandler, $e, $attempt)) {',
+                    1 => '                    throw $e;',
+                    2 => '                }',
+                    3 => '            }',
+                    4 => '        }',
+                    5 => '    }',
+                ),
+                'abs_path' => '/app/vendor/yiisoft/yii2/db/Command.php'
+            )
+        );
+
+        $this->assertSame($trace, $payload['exception']['values'][0]['stacktrace']['frames']);
     }
     
     public function testSentryAdapter()
@@ -288,7 +341,5 @@ class SentryAdapterTest extends ErrorApiTestCase
         ];
         
         $this->assertSame($expect, $adapter->generateStorePayload($model));
-
-        //$this->assertTrue($adapter->onCreate($model));
     }
 }

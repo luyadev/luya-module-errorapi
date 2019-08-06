@@ -51,16 +51,21 @@ class SentryAdapter extends BaseIntegrationAdapter
      */
     public function onCreate(Data $data)
     {
-        $serverName = Url::domain($data->getServerName());
-        $slug = Inflector::slug($serverName);
+        
 
-        $auth = $this->getAuth($data, $slug);
+        $auth = $this->getAuth($data);
 
         $url = 'https://sentry.io/api/'.$auth['id'].'/store/?sentry_version=5&sentry_key='.$auth['public'].'&sentry_secret='.$auth['secret'].'';
 
         $curl = new Curl();
         $curl->setHeader('Content-Type', 'application/json');
         return $curl->post($url, Json::encode($this->generateStorePayload($data)))->isSuccess();
+    }
+
+    public function generateProjectSlug(Data $data)
+    {
+        $serverName = Url::domain($data->getServerName());
+        return Inflector::slug(Inflector::camel2words($serverName));
     }
 
     /**
@@ -74,8 +79,9 @@ class SentryAdapter extends BaseIntegrationAdapter
      * @param string $slug The project name slug
      * @return array
      */
-    public function getAuth(Data $data, $slug)
+    public function getAuth(Data $data)
     {
+        $slug = $this->generateProjectSlug($data);
         $curl = new Curl();
         $curl->setHeader('Authorization', 'Bearer '. $this->token);
         $hasProject = $curl->get("/api/0/projects/{$this->organisation}/{$slug}/");
