@@ -151,17 +151,16 @@ class SentryAdapter extends BaseIntegrationAdapter
     public function generateContext(Data $data)
     {
         $contexts = [];
-        // os
+
         if ($data->getWhichBrowser()) {
+            // os
             $contexts['os'] = [
                 'version' => $data->getWhichBrowser()->os->version->value,
                 'name' => $data->getWhichBrowser()->os->name,
                 'type' => 'os',
             ];
-        }
 
-        // browser
-        if ($data->getWhichBrowser()->browser->name) {
+            // browser
             $contexts['browser'] = [
                 'version' => $data->getWhichBrowser()->browser->version->value,
                 'name' => $data->getWhichBrowser()->browser->name,
