@@ -3,9 +3,13 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 In order to read more about upgrading and BC breaks have a look at the [UPGRADE Document](UPGRADE.md).
 
+## 2.1.0
+
++ [#11](https://github.com/luyadev/luya-module-errorapi/issues/11) Add configuration for fingerprint in sentry adapter.
+
 ## 2.0.1 (6. August 2019)
 
-+[#10](https://github.com/luyadev/luya-module-errorapi/issues/10) Fixed bug with project slug..
++ [#10](https://github.com/luyadev/luya-module-errorapi/issues/10) Fixed bug with project slug..
 + Added travis & codeclimate.
 
 ## 2.0.0 (5. August 2019)
