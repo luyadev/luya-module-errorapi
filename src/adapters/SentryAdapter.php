@@ -14,6 +14,8 @@ use luya\helpers\Url;
 /**
  * Sentry Integration.
  * 
+ * @property callable $fingerprint Setter method which handles a callable to generate an array which should be used as sentry fingerprint.
+ * 
  * @since 2.0.0
  * @author Basil Suter <basil@nadar.io>
  */
@@ -197,6 +199,7 @@ class SentryAdapter extends BaseIntegrationAdapter
      * The callable must return an array.
      *
      * @param callable $function
+     * @since 2.1.0
      */
     public function setFingerprint(callable $function)
     {
@@ -208,6 +211,7 @@ class SentryAdapter extends BaseIntegrationAdapter
      *
      * @param Data $data
      * @return array
+     * @since 2.1.0
      */
     public function getFingerprint(Data $data)
     {
