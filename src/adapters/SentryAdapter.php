@@ -105,9 +105,9 @@ class SentryAdapter extends BaseIntegrationAdapter
             throw new Exception("The request for organisation key went wrong, maybe invalid sentry api credentials provided?");
         }
 
-        $dr = json_decode($keys->response, true);
+        $keysResponse = json_decode($keys->response, true);
 
-        $firstKey = current($dr);
+        $firstKey = current($keysResponse);
 
         return [
             'id' => $firstKey['projectId'],
@@ -131,7 +131,6 @@ class SentryAdapter extends BaseIntegrationAdapter
                 'filename' => $trace->file,
                 'function' => $trace->function,
                 'lineno' => $trace->line,
-                //'module' => $trace->class,
                 'context_line' => $trace->context_line,
                 'pre_context' => $trace->pre_context,
                 'post_context' => $trace->post_context,
@@ -159,7 +158,6 @@ class SentryAdapter extends BaseIntegrationAdapter
                 'name' => $data->getWhichBrowser()->os->name,
                 'type' => 'os',
             ];
-
             // browser
             $contexts['browser'] = [
                 'version' => $data->getWhichBrowser()->browser->version->value,
@@ -179,6 +177,51 @@ class SentryAdapter extends BaseIntegrationAdapter
         return $contexts;
     }
 
+    private $_fingerprint;
+
+    /**
+     * Setter method for fingerprint.
+     * 
+     * This can be configured when setting up the sentry adapter.
+     * 
+     * ```php
+     * 'fingerprint' => function(Data $data) {
+     *     return [
+     *          '{{ default }}', // https://docs.sentry.io/data-management/rollups
+     *          $data->getRequestUri(),
+     *          $data->getRequestUri(),
+     *     ];
+     * }
+     * ```
+     * 
+     * The callable must return an array.
+     *
+     * @param callable $function
+     */
+    public function setFingerprint(callable $function)
+    {
+        $this->_fingerprint = $function;
+    }
+
+    /**
+     * Get the fingerprint with Data context
+     *
+     * @param Data $data
+     * @return array
+     */
+    public function getFingerprint(Data $data)
+    {
+        if ($this->_fingerprint) {
+            return call_user_func_array($this->_fingerprint, [$data]);
+        }
+
+        return [
+            // '{{ default }}', // https://docs.sentry.io/data-management/rollups
+            $data->getErrorMessage(),
+            $data->getRequestUri(),
+        ];
+    }
+
     /**
      * Genereate the store payload
      *
@@ -195,11 +238,7 @@ class SentryAdapter extends BaseIntegrationAdapter
                 'value' => $data->getErrorMessage(),
                 'filename' => $data->getFile(),
             ],
-            'fingerprint' => [
-                // '{{ default }}', // https://docs.sentry.io/data-management/rollups/,
-                $data->getErrorMessage(),
-                $data->getRequestUri(),
-            ],
+            'fingerprint' => $this->getFingerprint($data),
             'logger' => 'luya.errorapi',
             'platform' => 'php',
             'sdk' => [

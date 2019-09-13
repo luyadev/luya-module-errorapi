@@ -4,6 +4,8 @@ namespace luya\errorapi\tests\adapters;
 
 use luya\errorapi\tests\ErrorApiTestCase;
 use luya\errorapi\adapters\SentryAdapter;
+use luya\errorapi\models\Data;
+use luya\helpers\Json;
 
 class SentryAdapterTest extends ErrorApiTestCase
 {
@@ -341,5 +343,30 @@ class SentryAdapterTest extends ErrorApiTestCase
         ];
         
         $this->assertSame($expect, $adapter->generateStorePayload($model));
+    }
+
+    public function testConfigFingerprint()
+    {
+        $sentry = new SentryAdapter([
+            'token' => 'x',
+            'organisation' => 'x',
+            'team' => 'x',
+            'fingerprint' => function(Data $data) {
+                return [
+                    'foobar',
+                    $data->getExceptionClassName(),
+                ];
+            }
+        ]);
+
+        $model = $this->fixture->newModel;
+        $model->error_json = Json::encode([
+            'exception_class_name' => 'theError',
+        ]);
+
+        $this->assertSame([
+            'foobar',
+            'theError',
+        ], $sentry->generateStorePayload($model)['fingerprint']);
     }
 }
