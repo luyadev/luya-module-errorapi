@@ -3,6 +3,7 @@
 namespace luya\errorapi;
 
 use luya\errorapi\models\Data;
+use luya\helpers\StringHelper;
 use yii\base\BaseObject;
 
 /**
@@ -15,6 +16,19 @@ use yii\base\BaseObject;
  */
 abstract class BaseIntegrationAdapter extends BaseObject
 {
+    /**
+     * @var array A list of words which the servername can contain and will therefore be ignored. Example
+     * 
+     * ```php
+     * 'invalidServers' => ['example.com']
+     * ```
+     * 
+     * If the server name contains example.com (for example: http://example.com/foobar) the error adapter will ignore the message and
+     * stops processing.
+     * @since 2.2.0
+     */
+    public $invalidServers = [];
+
     /**
      * The method which will be called when the error api recieves the error data
      * and the integration object is created.
@@ -34,7 +48,10 @@ abstract class BaseIntegrationAdapter extends BaseObject
     public function run(Data $data, Module $module)
     {
         $this->_module = $module;
-        $this->onCreate($data);
+
+        if (!$this->isInvalidServer($data, $this->invalidServers)) {
+            $this->onCreate($data);
+        }
     }
 
     private $_module;
@@ -57,5 +74,25 @@ abstract class BaseIntegrationAdapter extends BaseObject
     public function setModule(Module $module)
     {
         $this->_module = $module;
+    }
+
+    /**
+     * Check if the current data contains an invalid server
+     *
+     * @param Data $data
+     * @return boolean
+     * @since 2.2.0
+     */
+    public function isInvalidServer(Data $data, array $servers)
+    {
+        $serverName = $data->getServerName();
+
+        if (empty($serverName)) {
+            return true;
+        } elseif (StringHelper::contains($servers, $serverName)) {
+            return true;
+        }
+    
+        return false;
     }
 }

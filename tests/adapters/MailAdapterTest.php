@@ -8,6 +8,25 @@ use luya\errorapi\models\Data;
 
 class MailAdapterTest extends ErrorApiTestCase
 {
+    public function testIgnoreServer()
+    {
+        $adapter = new MailAdapter(['recipient' => 'foobar@example.com']);
+
+        $data = new Data();
+        $data->error_json = json_encode([
+            'serverName' => 'luya.io',
+            'message' => 'Hello World!',
+            'violate' => '<script>alert(0)</script>',
+            'trace' => [
+                1 => ['file' => 'yes.php', 'line' => 123]
+            ]
+        ]);
+
+        $this->assertTrue($adapter->isInvalidServer($data, ['luya.io']));
+        $this->assertTrue($adapter->isInvalidServer($data, ['io']));
+        $this->assertFalse($adapter->isInvalidServer($data, []));
+    }
+
     public function testAdapter()
     {
         $adapter = new MailAdapter(['recipient' => 'foobar@example.com']);

@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 In order to read more about upgrading and BC breaks have a look at the [UPGRADE Document](UPGRADE.md).
 
+## 2.2.0 (22. October 2019)
+
++ [#13](https://github.com/luyadev/luya-module-errorapi/pull/13) Configure `$invalidServers` in any adapter to ignore certain server names.
+
 ## 2.1.0 (13. September 2019)
 
 + [#11](https://github.com/luyadev/luya-module-errorapi/issues/11) Add configuration for fingerprint in sentry adapter.

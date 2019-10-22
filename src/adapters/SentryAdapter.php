@@ -2,14 +2,15 @@
 
 namespace luya\errorapi\adapters;
 
+use Curl\Curl;
+use luya\Exception;
+use luya\exceptions\WhitelistedException;
 use luya\errorapi\BaseIntegrationAdapter;
 use luya\errorapi\models\Data;
 use luya\helpers\Inflector;
-use Curl\Curl;
-use luya\Exception;
+use luya\helpers\Url;
 use yii\helpers\Json;
 use yii\base\InvalidConfigException;
-use luya\helpers\Url;
 
 /**
  * Sentry Integration.
@@ -93,18 +94,22 @@ class SentryAdapter extends BaseIntegrationAdapter
 
         // create the project if not exists
         if (!$hasProject->isSuccess()) {
-            $curl->post("https://sentry.io/api/0/teams/{$this->organisation}/{$this->team}/projects/", [
+            $newCreated = $curl->post("https://sentry.io/api/0/teams/{$this->organisation}/{$this->team}/projects/", [
                 'name' => Url::domain($data->getServerName()),
                 'slug' => $slug
             ]);
         }
 
-        // get project id with credentials
-
+        // Get the project keys
         $keys = $curl->get("https://sentry.io/api/0/projects/{$this->organisation}/{$slug}/keys/");
 
         if ($keys->isError()) {
-            throw new Exception("The request for organisation key went wrong, maybe invalid sentry api credentials provided?");
+            // if the project is newly created try to delete the project otherwise an empty project exists
+            if ($newCreated->isSuccess()) {
+                $curl->delete("https://sentry.io/api/0/projects/{$this->organisation}/{$slug}/");
+            }
+
+            throw new WhitelistedException("The request for organisation key went wrong, maybe invalid sentry api credentials provided?");
         }
 
         $keysResponse = json_decode($keys->response, true);
