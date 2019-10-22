@@ -27,10 +27,5 @@
 			"luya\\errorapi\\" : "src/",
 			"luya\\errorapi\\tests\\" : "tests/"
 		}
-	},
-	"extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
-    }
+	}
 }
