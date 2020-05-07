@@ -227,6 +227,7 @@ class SentryAdapterTest extends ErrorApiTestCase
         $expect = [
             'transaction' => '/vendor/yiisoft/yii2/filters/auth/AuthMethod.php',
             'server_name' => 'mytestdomain.com',
+            'release' => 'unknown',
             'metadata' => array (
                 'value' => 'Your request was made with invalid credentials.',
                 'filename' => '/vendor/yiisoft/yii2/filters/auth/AuthMethod.php',
@@ -263,6 +264,8 @@ class SentryAdapterTest extends ErrorApiTestCase
             'tags' => array (
                 'luya_version' => 'unknown',
                 'php_version' => 'unknown',
+                'yii_version' => 'unknown',
+                'app_version' => 'unknown',
                 'file' => '/vendor/yiisoft/yii2/filters/auth/AuthMethod.php',
                 'url' => 'http://mytestdomain.com/admin/api-admin-storage/file-replace',
             ),
