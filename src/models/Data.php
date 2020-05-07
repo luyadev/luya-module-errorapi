@@ -265,6 +265,16 @@ class Data extends ActiveRecord
         return $this->getErrorArrayKey('luya_version', 'unknown');
     }
 
+    public function getAppVersion()
+    {
+        return $this->getErrorArrayKey('app_version', 'unknown');
+    }
+
+    public function getYiiVersion()
+    {
+        return $this->getErrorArrayKey('yii_version', 'unknown');
+    }
+
     /**
      * Server Data
      *
