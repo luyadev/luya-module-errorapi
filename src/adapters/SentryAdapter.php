@@ -243,6 +243,7 @@ class SentryAdapter extends BaseIntegrationAdapter
         return array_filter([
             'transaction' => $data->getFile(),
             'server_name' => $data->getServerName(),
+            'release' => $data->getAppVersion(),
             'metadata' => [
                 'value' => $data->getErrorMessage(),
                 'filename' => $data->getFile(),
@@ -260,6 +261,8 @@ class SentryAdapter extends BaseIntegrationAdapter
             'tags' => [
                 'luya_version' => $data->getLuyaVersion(),
                 'php_version' => $data->getPhpVersion(),
+                'yii_version' => $data->getYiiVersion(),
+                'app_version' => $data->getAppVersion(),
                 'file' => $data->getFile(),
                 'url' => $data->getServer('SCRIPT_URI'),
                 // 'domain' => Url::domain($data->getServer('SCRIPT_URI')), // after luya cor release 1.0.20
