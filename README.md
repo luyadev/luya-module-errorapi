@@ -7,7 +7,6 @@
 [![LUYA](https://img.shields.io/badge/Powered%20by-LUYA-brightgreen.svg)](https://luya.io)
 [![Latest Stable Version](https://poser.pugx.org/luyadev/luya-module-errorapi/v/stable)](https://packagist.org/packages/luyadev/luya-module-errorapi)
 [![Total Downloads](https://poser.pugx.org/luyadev/luya-module-errorapi/downloads)](https://packagist.org/packages/luyadev/luya-module-errorapi)
-[![Slack Support](https://img.shields.io/badge/Slack-luyadev-yellowgreen.svg)](https://slack.luya.io/)
 [![Maintainability](https://api.codeclimate.com/v1/badges/ae9ba69fc2644b5ef9be/maintainability)](https://codeclimate.com/github/luyadev/luya-module-errorapi/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/ae9ba69fc2644b5ef9be/test_coverage)](https://codeclimate.com/github/luyadev/luya-module-errorapi/test_coverage)
 [![Build Status](https://travis-ci.org/luyadev/luya-module-errorapi.svg?branch=master)](https://travis-ci.org/luyadev/luya-module-errorapi)
@@ -28,7 +27,7 @@ composer require luyadev/luya-module-errorapi
 
 After installation via Composer include the module to your configuration file within the modules section.
 
-```
+```php
 'modules' => [
     // ...
     'errorapi' => [
@@ -75,7 +74,7 @@ After successfully installation and configuration run the migrate, import and se
 
 To enable the error api for your website you need to configure the default LUYA error handler in the component section of your config file with the current setup server (error api):
 
-```
+```php
 'components' => [
     // ...
     'errorHandler' => [
