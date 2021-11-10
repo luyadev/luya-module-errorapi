@@ -9,6 +9,12 @@ use yii\base\InvalidConfigException;
 /**
  * Slack Adapter.
  * 
+ * In order to generate a token:
+ * 
+ * 1.) Create an APP -> https://api.slack.com/apps/
+ * 2.) See menu entry "Install App"
+ * 3.) Use the "Bot User OAuth Token"
+ * 
  * @author Basil Suter <basil@nadar.io>
  * @since 2.0.0
  */
@@ -20,8 +26,7 @@ class SlackAdapter extends BaseIntegrationAdapter
     public $channel = '#luya';
 
     /**
-     * @var string The token
-     * @see https://api.slack.com/custom-integrations/legacy-tokens
+     * @var string Slack auth token known as "Bot User OAuth Token", starting with `xoxb-...`
      */
     public $token;
 
