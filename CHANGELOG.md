@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 In order to read more about upgrading and BC breaks have a look at the [UPGRADE Document](UPGRADE.md).
 
+## 2.2.2 (9. December 2021)
+
++ Slack token docs
+
 ## 2.2.1 (7. May 2020)
 
 + [#14](https://github.com/luyadev/luya-module-errorapi/pull/14) Add new app and yii version to sentry reports. Use app version as release name.
