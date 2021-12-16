@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 In order to read more about upgrading and BC breaks have a look at the [UPGRADE Document](UPGRADE.md).
 
+## 2.2.3 (?)
+
++ Fixed Data::getTrace() PHP Notice: Undefined index: class.
++ Fixed SentryAdapter::generateContext() method. When OS or Browser version is not detected, an exception was thrown (Undefined property).
+
 ## 2.2.2 (9. December 2021)
 
 + Slack token docs
