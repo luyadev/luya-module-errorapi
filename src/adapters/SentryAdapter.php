@@ -161,14 +161,14 @@ class SentryAdapter extends BaseIntegrationAdapter
         if ($data->getWhichBrowser()) {
             // os
             $contexts['os'] = [
-                'version' => $data->getWhichBrowser()->os->version->value,
-                'name' => $data->getWhichBrowser()->os->name,
+                'version' => isset($data->getWhichBrowser()->os->version->value) ? $data->getWhichBrowser()->os->version->value : null,
+                'name' => isset($data->getWhichBrowser()->os->name) ? $data->getWhichBrowser()->os->name : null,
                 'type' => 'os',
             ];
             // browser
             $contexts['browser'] = [
-                'version' => $data->getWhichBrowser()->browser->version->value,
-                'name' => $data->getWhichBrowser()->browser->name,
+                'version' => isset($data->getWhichBrowser()->browser->version->value) ? $data->getWhichBrowser()->browser->version->value : null,
+                'name' => isset($data->getWhichBrowser()->browser->name) ? $data->getWhichBrowser()->browser->name : null,
                 'type' => 'browser',
             ];
         }
