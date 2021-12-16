@@ -320,7 +320,7 @@ class Data extends ActiveRecord
                 'file' => $content['file'],
                 'line' => $content['line'],
                 'function' => $content['function'],
-                'class' => $content['class'],
+                'class' => isset($content['class']) ? $content['class'] : null,
                 'context_line' => isset($content['context_line']) ? $content['context_line'] : null,
                 'pre_context' => isset($content['pre_context']) ? $content['pre_context'] : null,
                 'post_context' => isset($content['post_context']) ? $content['post_context'] : null,
