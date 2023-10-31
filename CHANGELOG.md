@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 In order to read more about upgrading and BC breaks have a look at the [UPGRADE Document](UPGRADE.md).
 
+## 2.2.4 (31. October 2023)
+
++ Use nadar/parser for php 8.2 compatibility
++ [#24](https://github.com/luyadev/luya-module-errorapi/pull/24) Added indonesia language
+
 ## 2.2.3 (16. December 2021)
 
 + [#20](https://github.com/luyadev/luya-module-errorapi/pull/20) Fixed Data::getTrace() PHP Notice: Undefined index: class.

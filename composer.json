@@ -13,7 +13,7 @@
 		}
 	],
 	"require": {
-		"whichbrowser/parser": "^2.0"
+		"nadar/parser": "^1.0"
 	},
 	"require-dev" : {
 	   "luyadev/luya-testsuite" : "^2.0",
@@ -31,7 +31,11 @@
 	"config": {
         "fxp-asset": {
             "enabled": false
-        }
+        },
+		"allow-plugins": {
+			"yiisoft/yii2-composer": true,
+			"luyadev/luya-composer": true
+		}
     },
     "repositories": [
         {
